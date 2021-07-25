@@ -3,8 +3,13 @@ Hotswap Agent
 - Apache Maven 3.8.1
 - jdk9에서 실행
     - run-tests.sh 에 jdk 경로 변경
-- maven-surefire-plugin에서 에러
-    - version, skipTests 추가
+    - jdk8로 하면 not found symbol 에러 발생....
+- run-tests.sh 실행
+    - maven-surefire-plugin에서 에러
+        - version, skipTests 추가
+- release.sh 실행
+    - mvn release:prepare 실행
+    - mvn release:perform 실행
 =============
 
 <p align="left">

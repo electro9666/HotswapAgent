@@ -7,9 +7,27 @@ Hotswap Agent
 - run-tests.sh 실행
     - maven-surefire-plugin에서 에러
         - version, skipTests 추가
-- release.sh 실행
-    - mvn release:prepare 실행
-    - mvn release:perform 실행
+- compile.sh 실행
+    - mvn compile
+    <!-- - mvn release:prepare 실행
+    - mvn release:perform 실행 -->
+
+# mybatis reload가 안되는 이유
+1. MybatisPlugin.java의 registerResourceListeners 함수에서
+'''
+    if (configurationMap.containsKey(url.getPath())) {
+        refresh(500);
+    }
+'''
+- configurationMap의 key list:
+F:\workspace2020\spring-test\.metadata\.plugins\org.eclipse.wst.server.core\tmp4\wtpwebapps\_24_boardWeb\WEB-INF\classes\sql-map-config.xml=org.apache.ibatis.builder.xml.XMLConfigBuilder@4a8aa563, F:\workspace2020\spring-test\.metadata\.plugins\org.eclipse.wst.server.core\tmp4\wtpwebapps\_24_boardWeb\WEB-INF\classes\mappings\board2-mapping.xml=org.apache.ibatis.builder.xml.XMLMapperBuilder@64bcdb9d, F:\workspace2020\spring-test\.metadata\.plugins\org.eclipse.wst.server.core\tmp4\wtpwebapps\_24_boardWeb\WEB-INF\classes\mappings\board-mapping.xml=org.apache.ibatis.builder.xml.XMLMapperBuilder@6a7b397a, F:\workspace2020\spring-test\.metadata\.plugins\org.eclipse.wst.server.core\tmp4\wtpwebapps\_24_boardWeb\WEB-INF\classes\com\springbook\mybatis\mapper\MyMapper.xml=org.apache.ibatis.builder.xml.XMLMapperBuilder@6e44b0ed
+- url.getPath()의 value:
+/F:/workspace2020/spring-test/.metadata/.plugins/org.eclipse.wst.server.core/tmp4/wtpwebapps/_24_boardWeb/WEB-INF/classes/com/springbook/mybatis/mapper/MyMapper.xml
+
+- 같을 수가 없다.
+- 로직을 수정해서 아래와 같이 refresh log를 확인했지만, 결과적으로 반영되지 않는다.
+HOTSWAP AGENT: 15:16:44.646 DEBUG (org.hotswap.agent.plugin.mybatis.MyBatisRefreshCommands) - Refreshing MyBatis configuration.
+HOTSWAP AGENT: 15:16:44.684 RELOAD (org.hotswap.agent.plugin.mybatis.MyBatisRefreshCommands) - MyBatis configuration refreshed.
 =============
 
 <p align="left">

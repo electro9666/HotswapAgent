@@ -64,6 +64,7 @@ public class MyBatisPlugin {
 
     public void registerConfigurationFile(String configFile, Object configObject) {
         if (configFile != null && !configurationMap.containsKey(configFile)) {
+            configFile = configFile.replaceAll("\\\\", "/"); // check
             LOGGER.debug("MyBatisPlugin - configuration file registered : {}", configFile);
             configurationMap.put(configFile, configObject);
         }
@@ -71,9 +72,19 @@ public class MyBatisPlugin {
 
     @OnResourceFileEvent(path="/", filter = ".*.xml", events = {FileEvent.MODIFY})
     public void registerResourceListeners(URL url) {
-        if (configurationMap.containsKey(url.getPath())) {
-            refresh(500);
+        // if (configurationMap.containsKey(url.getPath())) {
+        //     refresh(500);
+        // }
+        String urlPath = url.getPath();
+        if (urlPath.startsWith("/")) {
+            urlPath = urlPath.substring(1);   
         }
+        for (String key : configurationMap.keySet()) {
+        	if (key.indexOf(urlPath) != -1) {
+        		refresh(500);
+                break;
+        	}
+		}
     }
 
     // reload the configuration - schedule a command to run in the application classloader and merge

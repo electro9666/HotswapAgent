@@ -1,5 +1,11 @@
 Hotswap Agent
 =============
+- Apache Maven 3.8.1
+- jdk9에서 실행
+    - run-tests.sh 에 jdk 경로 변경
+- maven-surefire-plugin에서 에러
+    - version, skipTests 추가
+=============
 
 <p align="left">
     <a href="https://mvnrepository.com/artifact/org.hotswapagent/hotswap-agent-core">
